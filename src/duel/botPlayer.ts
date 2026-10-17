@@ -118,6 +118,11 @@ export class BotPlayer {
    * Bot automatically joins an open duel as Defender on-chain.
    */
   async autoJoin(chainId: number, gameId: bigint, stakeEth: string): Promise<string> {
+    if (typeof window !== 'undefined' && window.location.protocol === 'https:' && chainId === 31337) {
+      throw new Error(
+        'Browsers block local HTTP (http://127.0.0.1:8545) on HTTPS domains like Vercel. For Hardhat testing, open http://localhost:2035 in your browser. For Vercel, switch MetaMask to Ethereum Sepolia!'
+      )
+    }
     await this.autoFundLocal(chainId)
     const signer = this.getSigner(chainId)
     const txHash = await contractClient.joinGame(chainId, signer, gameId, stakeEth)
@@ -128,6 +133,11 @@ export class BotPlayer {
    * Bot automatically commits a random move (ATTACK, SHIELD, SCAN) with a secret salt on-chain.
    */
   async autoCommit(chainId: number, gameId: bigint, round: bigint): Promise<{ move: Move; txHash: string }> {
+    if (typeof window !== 'undefined' && window.location.protocol === 'https:' && chainId === 31337) {
+      throw new Error(
+        'Browsers block local HTTP (http://127.0.0.1:8545) on HTTPS domains like Vercel. For Hardhat testing, open http://localhost:2035 in your browser. For Vercel, switch MetaMask to Ethereum Sepolia!'
+      )
+    }
     await this.autoFundLocal(chainId)
     const signer = this.getSigner(chainId)
     const contractAddr = contractClient.getContractAddress(chainId)
@@ -162,6 +172,11 @@ export class BotPlayer {
    * Bot automatically reveals its move on-chain using the stored salt.
    */
   async autoReveal(chainId: number, gameId: bigint, round: bigint): Promise<string> {
+    if (typeof window !== 'undefined' && window.location.protocol === 'https:' && chainId === 31337) {
+      throw new Error(
+        'Browsers block local HTTP (http://127.0.0.1:8545) on HTTPS domains like Vercel. For Hardhat testing, open http://localhost:2035 in your browser. For Vercel, switch MetaMask to Ethereum Sepolia!'
+      )
+    }
     const signer = this.getSigner(chainId)
     const storageKey = `${BOT_SALT_PREFIX}${chainId}_${gameId}_${round}`
 

@@ -584,6 +584,29 @@ export function DuelLobby() {
               </div>
             )}
 
+            {/* HTTPS + HARDHAT NOTICE */}
+            {chainId === 31337 && typeof window !== 'undefined' && window.location.protocol === 'https:' && (
+              <div
+                style={{
+                  background: 'rgba(210, 153, 34, 0.15)',
+                  border: '1px solid #d29922',
+                  borderRadius: '10px',
+                  padding: '12px 18px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  color: '#e6edf3',
+                  fontSize: '13px',
+                }}
+              >
+                <span style={{ fontSize: '18px' }}>💡</span>
+                <div>
+                  <b style={{ color: '#e3b341' }}>Testing Hardhat Local on Vercel:</b> Browsers block local network RPCs (<code style={{ color: '#79c0ff' }}>http://127.0.0.1:8545</code>) on HTTPS websites.
+                  For local Hardhat testing, open <a href="http://localhost:2035" target="_blank" rel="noreferrer" style={{ color: '#58a6ff', textDecoration: 'underline', fontWeight: 'bold' }}>http://localhost:2035</a>. For production duels on Vercel, switch MetaMask to <b>Ethereum Sepolia</b>!
+                </div>
+              </div>
+            )}
+
             {/* SOLO DEMO HERO CARD (1-Click Duel vs AI Defender) */}
             <div
               style={{

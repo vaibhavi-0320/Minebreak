@@ -202,10 +202,30 @@ export class ContractClient {
     }
   }
 
+  private async getEstimatedGas(
+    contract: ethers.Contract,
+    method: string,
+    args: unknown[],
+    overrides: ethers.Overrides = {},
+    fallbackLimit: bigint = 200000n
+  ): Promise<bigint> {
+    try {
+      const fn = contract[method]
+      if (typeof fn?.estimateGas === 'function') {
+        const estimated: bigint = await fn.estimateGas(...args, overrides)
+        return (estimated * 130n) / 100n
+      }
+      return fallbackLimit
+    } catch {
+      return fallbackLimit
+    }
+  }
+
   async createGame(chainId: number, signer: ethers.Signer, stakeEth: string): Promise<{ gameId: bigint; txHash: string }> {
     const contract = this.getWriteContract(chainId, signer)
     const value = ethers.parseEther(stakeEth || '0')
-    const tx = await contract.createGame({ value })
+    const gasLimit = await this.getEstimatedGas(contract, 'createGame', [], { value }, 150000n)
+    const tx = await contract.createGame({ value, gasLimit })
     const receipt = await tx.wait()
 
     let gameId = 0n
@@ -227,42 +247,48 @@ export class ContractClient {
   async joinGame(chainId: number, signer: ethers.Signer, gameId: bigint, stakeEth: string): Promise<string> {
     const contract = this.getWriteContract(chainId, signer)
     const value = ethers.parseEther(stakeEth || '0')
-    const tx = await contract.joinGame(gameId, { value })
+    const gasLimit = await this.getEstimatedGas(contract, 'joinGame', [gameId], { value }, 150000n)
+    const tx = await contract.joinGame(gameId, { value, gasLimit })
     const receipt = await tx.wait()
     return receipt.hash
   }
 
   async cancelGame(chainId: number, signer: ethers.Signer, gameId: bigint): Promise<string> {
     const contract = this.getWriteContract(chainId, signer)
-    const tx = await contract.cancelGame(gameId)
+    const gasLimit = await this.getEstimatedGas(contract, 'cancelGame', [gameId], {}, 100000n)
+    const tx = await contract.cancelGame(gameId, { gasLimit })
     const receipt = await tx.wait()
     return receipt.hash
   }
 
   async commitMove(chainId: number, signer: ethers.Signer, gameId: bigint, commitment: string): Promise<string> {
     const contract = this.getWriteContract(chainId, signer)
-    const tx = await contract.commitMove(gameId, commitment)
+    const gasLimit = await this.getEstimatedGas(contract, 'commitMove', [gameId, commitment], {}, 120000n)
+    const tx = await contract.commitMove(gameId, commitment, { gasLimit })
     const receipt = await tx.wait()
     return receipt.hash
   }
 
   async revealMove(chainId: number, signer: ethers.Signer, gameId: bigint, move: Move, salt: string): Promise<string> {
     const contract = this.getWriteContract(chainId, signer)
-    const tx = await contract.revealMove(gameId, move, salt)
+    const gasLimit = await this.getEstimatedGas(contract, 'revealMove', [gameId, move, salt], {}, 250000n)
+    const tx = await contract.revealMove(gameId, move, salt, { gasLimit })
     const receipt = await tx.wait()
     return receipt.hash
   }
 
   async claimTimeout(chainId: number, signer: ethers.Signer, gameId: bigint): Promise<string> {
     const contract = this.getWriteContract(chainId, signer)
-    const tx = await contract.claimTimeout(gameId)
+    const gasLimit = await this.getEstimatedGas(contract, 'claimTimeout', [gameId], {}, 120000n)
+    const tx = await contract.claimTimeout(gameId, { gasLimit })
     const receipt = await tx.wait()
     return receipt.hash
   }
 
   async withdraw(chainId: number, signer: ethers.Signer): Promise<string> {
     const contract = this.getWriteContract(chainId, signer)
-    const tx = await contract.withdraw()
+    const gasLimit = await this.getEstimatedGas(contract, 'withdraw', [], {}, 80000n)
+    const tx = await contract.withdraw({ gasLimit })
     const receipt = await tx.wait()
     return receipt.hash
   }

@@ -1,4 +1,4 @@
-# `.agents/` — Embervale harness companions
+# `.agents/` — harness companions
 
 Root law: **`AGENTS.md`** (symlinked as `CLAUDE.md`).
 

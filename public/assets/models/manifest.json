@@ -1,0 +1,18 @@
+{
+  "assets": [
+    "ember_prop_tree_00",
+    "ember_prop_tree_01",
+    "ember_prop_rock_00",
+    "ember_prop_lantern_00",
+    "ember_prop_shrine_00",
+    "ember_prop_cottage_00",
+    "ember_player_hearthkeeper_00",
+    "ember_mob_slime_00",
+    "ember_mob_mushroom_00",
+    "ember_mob_imp_00",
+    "ember_mob_beetle_00",
+    "ember_boss_tyrant_00"
+  ],
+  "generator": "embervale-blender",
+  "blender": "4.5.11 LTS"
+}

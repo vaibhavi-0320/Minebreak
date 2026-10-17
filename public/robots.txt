@@ -1,0 +1,33 @@
+# Embervale — https://embervale-amber.vercel.app
+User-agent: *
+Allow: /
+
+# Allow major search + AI crawlers explicitly
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+Sitemap: https://embervale-amber.vercel.app/sitemap.xml

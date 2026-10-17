@@ -1,0 +1,15 @@
+# MINEBREAK
+
+> Tactical voxel action & on-chain vault duels. Angled top-down combat, wave survival, and cryptographic commit-reveal duels on Ethereum Sepolia.
+
+- Source: https://github.com/vaibhavi-0320/Minebreak
+- Author: Vaibhavi — https://github.com/vaibhavi-0320/Minebreak
+- Stack: React 19, Vite, React Three Fiber, Rapier 3D, Zustand, ethers.js v6, Solidity, Hardhat
+
+## Summary
+
+MINEBREAK is a browser-native voxel action and duel platform. Players can explore PvE wave survival in the voxel realm and engage in real-time, on-chain commit-reveal vault duels with testnet stakes on Ethereum Sepolia.
+
+## Attribution
+
+Built on Embervale (MIT License).

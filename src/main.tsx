@@ -1,0 +1,13 @@
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import App from './App'
+import { installAudioUnlock } from './audio/audio'
+import './styles/index.css'
+
+installAudioUnlock()
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)

@@ -1,0 +1,58 @@
+{
+  "ui-select": {
+    "file": "ui-select.mp3",
+    "loop": false
+  },
+  "footstep": {
+    "file": "footstep.mp3",
+    "loop": false
+  },
+  "sword-swing": {
+    "file": "sword-swing.mp3",
+    "loop": false
+  },
+  "sword-hit": {
+    "file": "sword-hit.mp3",
+    "loop": false
+  },
+  "dash": {
+    "file": "dash.mp3",
+    "loop": false
+  },
+  "player-hurt": {
+    "file": "player-hurt.mp3",
+    "loop": false
+  },
+  "mob-death": {
+    "file": "mob-death.mp3",
+    "loop": false
+  },
+  "boss-roar": {
+    "file": "boss-roar.mp3",
+    "loop": false
+  },
+  "level-up": {
+    "file": "level-up.mp3",
+    "loop": false
+  },
+  "wave-start": {
+    "file": "wave-start.mp3",
+    "loop": false
+  },
+  "heal": {
+    "file": "heal.mp3",
+    "loop": false
+  },
+  "victory": {
+    "file": "victory.mp3",
+    "loop": false
+  },
+  "defeat": {
+    "file": "defeat.mp3",
+    "loop": false
+  },
+  "ambient-grove": {
+    "file": "ambient-grove.mp3",
+    "loop": true
+  }
+}

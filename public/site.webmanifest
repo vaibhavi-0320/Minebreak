@@ -1,0 +1,20 @@
+{
+  "name": "MINEBREAK",
+  "short_name": "MINEBREAK",
+  "description": "MINEBREAK: Tactical voxel action & on-chain vault duels.",
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#1C241C",
+  "theme_color": "#2A3B2E",
+  "lang": "en",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

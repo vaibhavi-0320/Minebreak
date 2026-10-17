@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2A3B2E"/>
+      <stop offset="55%" stop-color="#1C241C"/>
+      <stop offset="100%" stop-color="#3D5344"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="80" y="90" width="1040" height="450" rx="24" fill="#EFE4D0" stroke="#1C241C" stroke-width="8"/>
+  <rect x="110" y="120" width="48" height="48" rx="8" fill="#7CB87A" stroke="#1C241C" stroke-width="4"/>
+  <rect x="170" y="100" width="48" height="48" rx="8" fill="#A8D48A" stroke="#1C241C" stroke-width="4"/>
+  <rect x="230" y="120" width="48" height="48" rx="8" fill="#E07A3A" stroke="#1C241C" stroke-width="4"/>
+  <text x="600" y="300" text-anchor="middle" font-family="Georgia, serif" font-size="96" font-weight="700" fill="#1C241C">MINEBREAK</text>
+  <text x="600" y="370" text-anchor="middle" font-family="system-ui, sans-serif" font-size="36" fill="#3A4A3C">Voxel Action &amp; On-Chain Vault Duels</text>
+  <text x="600" y="460" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" fill="#4F7A55">Play free in the browser</text>
+</svg>

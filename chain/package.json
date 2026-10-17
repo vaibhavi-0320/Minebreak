@@ -1,0 +1,23 @@
+{
+  "name": "minebreak-chain",
+  "version": "1.0.0",
+  "description": "MINEBREAK Solidity commit-reveal vault duel contracts",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "node": "hardhat node",
+    "deploy:local": "hardhat run scripts/deploy.js --network localhost",
+    "deploy:sepolia": "hardhat run scripts/deploy.js --network sepolia",
+    "demo": "hardhat run scripts/demo.js --network localhost"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
+    "@nomicfoundation/hardhat-ethers": "^3.0.0",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
+    "chai": "^4.3.7",
+    "dotenv": "^16.4.0",
+    "ethers": "^6.13.0",
+    "hardhat": "^2.22.0"
+  }
+}

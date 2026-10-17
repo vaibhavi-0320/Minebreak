@@ -1,4 +1,4 @@
-# MINEBREAK (Embervale + Vault Duel)
+# MINEBREAK 
 
 A browser-native voxel game featuring both cozy PvE exploration and real-time on-chain PvP **Vault Duels** backed by an Ethereum Solidity commit-reveal smart contract.
 
@@ -6,12 +6,8 @@ A browser-native voxel game featuring both cozy PvE exploration and real-time on
 
 ## Game Modes
 
-### 1. Embervale (PvE Campaign)
-- Cozy angled top-down voxel meadow with trees, cottage, shrines, and lanterns.
-- Two-handed greatsword combat with openers and 4-hit combo routes.
-- Wave survival against Moss Slimes, Caplings, Ember Imps, and the Grove Tyrant.
 
-### 2. VAULT // BREAK (PvP Commit-Reveal Duels)
+### Mine// BREAK (PvP Commit-Reveal Duels)
 - Two-player tactical vault duels backed by the `VaultBreak.sol` smart contract on **Ethereum Sepolia** (and local dev on Hardhat).
 - Optional testnet stakes: **Free**, **0.0005 ETH**, or **0.001 ETH**.
 - Cryptographic commit-reveal scheme:
@@ -36,7 +32,7 @@ A browser-native voxel game featuring both cozy PvE exploration and real-time on
 ## Project Structure
 
 ```text
-embervale/
+Game/
 ├── chain/                       # Smart contracts and tooling
 │   ├── contracts/
 │   │   └── VaultBreak.sol       # Commit-reveal duel contract

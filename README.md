@@ -1,7 +1,7 @@
 # MINEBREAK
 
 <p align="center">
-  <strong>A voxel world. A tactical duel. A game where the outcome can be independently verified.</strong>
+  <strong> A tactical duel. A game where the outcome can be independently verified.</strong>
 </p>
 
 <p align="center">

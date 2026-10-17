@@ -1325,15 +1325,44 @@ export function DuelLobby() {
                         style={{
                           padding: '16px',
                           textAlign: 'center',
-                          background: 'rgba(46, 160, 67, 0.1)',
-                          border: '1px solid rgba(46, 160, 67, 0.3)',
+                          background: canClaimTimeout ? 'rgba(248, 81, 73, 0.15)' : 'rgba(46, 160, 67, 0.1)',
+                          border: canClaimTimeout ? '1px solid rgba(248, 81, 73, 0.4)' : '1px solid rgba(46, 160, 67, 0.3)',
                           borderRadius: '8px',
-                          color: '#3fb950',
+                          color: canClaimTimeout ? '#ff7b72' : '#3fb950',
                           fontSize: '14px',
                           fontWeight: 600,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '10px',
+                          alignItems: 'center',
                         }}
                       >
-                        🔓 Move Revealed! Waiting for opponent to reveal...
+                        <span>
+                          {canClaimTimeout
+                            ? '⏰ Round Deadline Expired! Opponent failed to reveal in time.'
+                            : '🔓 Move Revealed! Waiting for opponent to reveal...'}
+                        </span>
+                        {canClaimTimeout && (
+                          <button
+                            type="button"
+                            onClick={() => claimTimeout()}
+                            disabled={isActing}
+                            className="btn-primary"
+                            style={{
+                              background: '#f85149',
+                              border: 'none',
+                              padding: '10px 24px',
+                              fontSize: '14px',
+                              fontWeight: 800,
+                              color: '#fff',
+                              cursor: isActing ? 'wait' : 'pointer',
+                              borderRadius: '6px',
+                              boxShadow: '0 4px 16px rgba(248, 81, 73, 0.4)',
+                            }}
+                          >
+                            {isActing ? 'Claiming Victory...' : '⚡ Claim Timeout Victory & Win Match'}
+                          </button>
+                        )}
                       </div>
                     ) : (
                       <button

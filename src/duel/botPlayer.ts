@@ -177,6 +177,7 @@ export class BotPlayer {
         'Browsers block local HTTP (http://127.0.0.1:8545) on HTTPS domains like Vercel. For Hardhat testing, open http://localhost:2035 in your browser. For Vercel, switch MetaMask to Ethereum Sepolia!'
       )
     }
+    await this.autoFundLocal(chainId)
     const signer = this.getSigner(chainId)
     const storageKey = `${BOT_SALT_PREFIX}${chainId}_${gameId}_${round}`
 

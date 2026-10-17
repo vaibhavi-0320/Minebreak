@@ -551,14 +551,16 @@ export const useDuelStore = create<DuelState>((set, get) => ({
 
       await get().refreshCurrentGame()
 
-      // If in Solo Demo Bot match, bot immediately commits its move
+      // If in Solo Demo Bot match, bot immediately commits and reveals its move
       if (isBotMatch) {
         set({ botStatus: 'Bot committing secret move on-chain...' })
         try {
           await botPlayer.autoCommit(chainId, currentGame.gameId, currentGame.round)
-          set({ botStatus: 'Bot committed. Round is in REVEAL phase!' })
+          set({ botStatus: 'Bot committed. Revealing bot move on-chain...' })
+          await botPlayer.autoReveal(chainId, currentGame.gameId, currentGame.round)
+          set({ botStatus: 'Bot revealed move! Click Reveal Move to resolve the round.' })
         } catch (botErr) {
-          console.warn('Bot auto-commit error:', botErr)
+          console.warn('Bot auto-commit/reveal error:', botErr)
         }
         await get().refreshCurrentGame()
       }
@@ -592,14 +594,23 @@ export const useDuelStore = create<DuelState>((set, get) => ({
 
       await get().refreshCurrentGame()
 
-      // If in Solo Demo Bot match, bot immediately reveals its move
+      // If in Solo Demo Bot match, ensure bot has revealed
       if (isBotMatch) {
-        set({ botStatus: 'Bot revealing move on-chain...' })
-        try {
-          await botPlayer.autoReveal(chainId, currentGame.gameId, currentGame.round)
-          set({ botStatus: 'Bot revealed! Round resolved.' })
-        } catch (botErr) {
-          console.warn('Bot auto-reveal error:', botErr)
+        const latestRound = await contractClient.getRoundState(chainId, currentGame.gameId)
+        if (!latestRound.defenderRevealed) {
+          set({ botStatus: 'Bot revealing move on-chain...' })
+          try {
+            await botPlayer.autoReveal(chainId, currentGame.gameId, currentGame.round)
+            set({ botStatus: 'Bot revealed! Round resolved.' })
+          } catch (botErr: unknown) {
+            console.warn('Bot auto-reveal error:', botErr)
+            const msg = botErr instanceof Error ? botErr.message : String(botErr)
+            if (msg.includes('deadline passed')) {
+              set({ botStatus: '⏰ Round deadline expired. Claim timeout victory below!' })
+            } else {
+              set({ botStatus: `Bot reveal status: ${msg}` })
+            }
+          }
         }
         await get().refreshCurrentGame()
       }
@@ -709,14 +720,18 @@ export const useDuelStore = create<DuelState>((set, get) => ({
           } finally {
             botActionInProgress = false
           }
-        } else if (updated.phase === Phase.REVEAL && roundState.infiltratorRevealed && !roundState.defenderRevealed) {
+        } else if (updated.phase === Phase.REVEAL && !roundState.defenderRevealed) {
           botActionInProgress = true
-          set({ botStatus: 'Bot revealing move...' })
+          set({ botStatus: 'Bot revealing move on-chain...' })
           try {
             await botPlayer.autoReveal(chainId, updated.gameId, updated.round)
-            set({ botStatus: 'Bot revealed move.' })
-          } catch (e) {
+            set({ botStatus: 'Bot revealed move! Click Reveal Move to resolve the round.' })
+          } catch (e: unknown) {
             console.warn('Bot background reveal failed:', e)
+            const msg = e instanceof Error ? e.message : String(e)
+            if (msg.includes('deadline passed')) {
+              set({ botStatus: '⏰ Round deadline expired. Claim timeout victory below!' })
+            }
           } finally {
             botActionInProgress = false
           }

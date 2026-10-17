@@ -1097,6 +1097,28 @@ export function DuelLobby() {
             {/* ACTIVE MATCH PHASES (COMMIT, REVEAL, FINISHED) */}
             {currentGame.phase !== Phase.WAITING && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <button
+                    type="button"
+                    onClick={() => leaveCurrentGame()}
+                    style={{
+                      padding: '6px 14px',
+                      background: 'rgba(255, 255, 255, 0.08)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      color: '#c9d1d9',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      fontSize: '12px',
+                      fontWeight: 600,
+                    }}
+                  >
+                    ← Leave Match & Return to Lobby
+                  </button>
+                  <span style={{ fontSize: '12px', color: '#8b949e', fontFamily: 'monospace' }}>
+                    Match #{currentGame.gameId.toString()}
+                  </span>
+                </div>
+
                 {/* Scoreboard */}
                 <div
                   style={{

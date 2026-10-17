@@ -114,6 +114,36 @@ export class BotPlayer {
     }
   }
 
+  private inMemoryCommits = new Map<string, { move: Move; salt: string }>()
+
+  getStoredCommitment(chainId: number, gameId: bigint, round: bigint): { move: Move; salt: string } | null {
+    const key = `${BOT_SALT_PREFIX}${chainId}_${gameId}_${round}`
+    if (this.inMemoryCommits.has(key)) {
+      return this.inMemoryCommits.get(key)!
+    }
+    if (typeof localStorage !== 'undefined') {
+      const saved = localStorage.getItem(key)
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved)
+          this.inMemoryCommits.set(key, parsed)
+          return parsed
+        } catch (_) {}
+      }
+    }
+    return null
+  }
+
+  saveCommitment(chainId: number, gameId: bigint, round: bigint, move: Move, salt: string): void {
+    const key = `${BOT_SALT_PREFIX}${chainId}_${gameId}_${round}`
+    this.inMemoryCommits.set(key, { move, salt })
+    if (typeof localStorage !== 'undefined') {
+      try {
+        localStorage.setItem(key, JSON.stringify({ move, salt }))
+      } catch (_) {}
+    }
+  }
+
   /**
    * Bot automatically joins an open duel as Defender on-chain.
    */
@@ -143,15 +173,19 @@ export class BotPlayer {
     const contractAddr = contractClient.getContractAddress(chainId)
     if (!contractAddr) throw new Error('Contract address not found')
 
-    // Pick random move between ATTACK (1), SHIELD (2), and SCAN (3)
-    const moves = [Move.ATTACK, Move.SHIELD, Move.SCAN]
-    const chosenMove = moves[Math.floor(Math.random() * moves.length)]
-    const salt = makeSalt()
+    let chosenMove: Move
+    let salt: string
 
-    // Store bot's salt and move for later reveal
-    const storageKey = `${BOT_SALT_PREFIX}${chainId}_${gameId}_${round}`
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(storageKey, JSON.stringify({ move: chosenMove, salt }))
+    // Check if a salt was already generated for this exact game and round to prevent overwriting
+    const existing = this.getStoredCommitment(chainId, gameId, round)
+    if (existing) {
+      chosenMove = existing.move
+      salt = existing.salt
+    } else {
+      const moves = [Move.ATTACK, Move.SHIELD, Move.SCAN]
+      chosenMove = moves[Math.floor(Math.random() * moves.length)]
+      salt = makeSalt()
+      this.saveCommitment(chainId, gameId, round, chosenMove, salt)
     }
 
     const commitment = makeCommitment({
@@ -164,8 +198,16 @@ export class BotPlayer {
       salt,
     })
 
-    const txHash = await contractClient.commitMove(chainId, signer, gameId, commitment)
-    return { move: chosenMove, txHash }
+    try {
+      const txHash = await contractClient.commitMove(chainId, signer, gameId, commitment)
+      return { move: chosenMove, txHash }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err)
+      if (msg.includes('Already committed')) {
+        return { move: chosenMove, txHash: '' }
+      }
+      throw err
+    }
   }
 
   /**
@@ -179,24 +221,22 @@ export class BotPlayer {
     }
     await this.autoFundLocal(chainId)
     const signer = this.getSigner(chainId)
-    const storageKey = `${BOT_SALT_PREFIX}${chainId}_${gameId}_${round}`
 
-    let move = Move.ATTACK
-    let salt = '0x' + '00'.repeat(32)
-
-    if (typeof localStorage !== 'undefined') {
-      const saved = localStorage.getItem(storageKey)
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved)
-          move = parsed.move
-          salt = parsed.salt
-        } catch (_) {}
-      }
+    const stored = this.getStoredCommitment(chainId, gameId, round)
+    if (!stored) {
+      throw new Error(`Bot commitment salt not found for game ${gameId} round ${round}`)
     }
 
-    const txHash = await contractClient.revealMove(chainId, signer, gameId, move, salt)
-    return txHash
+    try {
+      const txHash = await contractClient.revealMove(chainId, signer, gameId, stored.move, stored.salt)
+      return txHash
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err)
+      if (msg.includes('Already revealed')) {
+        return ''
+      }
+      throw err
+    }
   }
 }
 
